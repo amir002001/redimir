@@ -51,5 +51,6 @@ func query(connection *net.TCPConn, message string) error {
 	}
 	receiveMessage := make([]byte, receiveHeader)
 	_, err := connection.Read(receiveMessage)
+	fmt.Printf("server says: %s\n", receiveMessage)
 	return err
 }

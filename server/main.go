@@ -54,7 +54,7 @@ func oneRequest(connection net.Conn) error {
 	// read
 	var header uint32
 
-	if err := binary.Read(connection, binary.LittleEndian, header); err != nil {
+	if err := binary.Read(connection, binary.LittleEndian, &header); err != nil {
 		return err
 	} else if header > maxMessageSize {
 		return fmt.Errorf("message too long")
