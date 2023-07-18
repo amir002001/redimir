@@ -1,3 +1,3 @@
-module test
+module client
 
 go 1.20
