@@ -51,30 +51,27 @@ func processClient(connection net.Conn) error {
 }
 
 func oneRequest(connection net.Conn) error {
-	readBuffer := make([]byte, maxMessageSize)
+	// read
+	var header uint32
 
-	err := readFull(connection, readBuffer, headerSize)
-	if err != nil {
+	if err := binary.Read(connection, binary.LittleEndian, header); err != nil {
 		return err
-	}
-
-	len := binary.LittleEndian.Uint32(readBuffer[:4])
-	if len > maxMessageSize {
+	} else if header > maxMessageSize {
 		return fmt.Errorf("message too long")
 	}
 
-	err = readFull(connection, readBuffer[headerSize:], len)
-	if err != nil {
+	message := make([]byte, header)
+	if _, err := connection.Read(message); err != nil {
 		return err
 	}
-	fmt.Printf("Client says: %s\n", string(readBuffer[4:4+len]))
-	return nil
-}
+	fmt.Printf("Client says: %s\n", string(message))
 
-func readFull(connection net.Conn, readBuffer []byte, readN uint32) error {
-	return nil
-}
+	// reply
+	reply := "world"
+	if err := binary.Write(connection, binary.LittleEndian, uint32(len(reply))); err != nil {
+		return err
+	}
 
-func writeAll() {
-	return nil
+	_, err := connection.Write([]byte(reply))
+	return err
 }
