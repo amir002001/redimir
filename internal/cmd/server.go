@@ -7,7 +7,7 @@ import (
 )
 
 var serverCommand = &cobra.Command{
-	Use:   "client",
+	Use:   "server",
 	Short: "Initialize the client",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("server init")
