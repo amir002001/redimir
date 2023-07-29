@@ -44,13 +44,31 @@ func SendParams(params []string) (result string, err error) {
 }
 
 func handleGet(key string) (result string, err error) {
-	return "ok", nil
+	request := fmt.Sprintf("*2\r\n$3get\r\n$%d%s", len(key), key)
+	_, err = redimirConnection.Write([]byte(request))
+	if err != nil {
+		return "", err
+	}
+	// TODO HANDLE RESPONSE
+	return "OK", nil
 }
 
 func handleSet(key, newValue string) (result string, err error) {
-	return "ok", nil
+	request := fmt.Sprintf("*3\r\n$3set\r\n$%d%s\r\n%d%s", len(key), key, len(newValue), newValue)
+	_, err = redimirConnection.Write([]byte(request))
+	if err != nil {
+		return "", err
+	}
+	// TODO HANDLE RESPONSE
+	return "OK", nil
 }
 
 func handleDelete(key string) (result string, err error) {
-	return "ok", nil
+	request := fmt.Sprintf("*2\r\n$3del\r\n$%d%s", len(key), key)
+	_, err = redimirConnection.Write([]byte(request))
+	if err != nil {
+		return "", err
+	}
+	// TODO HANDLE RESPONSE
+	return "OK", nil
 }
