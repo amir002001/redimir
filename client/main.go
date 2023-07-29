@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 
 	"github.com/knz/bubbline"
 )
 
-func main() {
+var invalidCommandError = fmt.Errorf("invalid command")
+
+func try() {
 	// Instantiate the widget.
 	m := bubbline.New()
 
@@ -35,11 +38,40 @@ func main() {
 			continue
 		}
 
-		fmt.Println(val)
-		// Handle regular input.
-		err = m.AddHistory(val)
-		if err != nil {
+		trimmedVal := strings.TrimSpace(val)
+		params := strings.Split(trimmedVal, " ")
+		if len(params[0]) == 0 {
+			fmt.Println(invalidCommandError.Error())
+			continue
+		}
+
+		if err := handleParams(params); err != nil {
+			fmt.Println(err.Error())
+		}
+
+		if err := m.AddHistory(val); err != nil {
 			log.Fatal(err)
 		}
 	}
+}
+
+func handleParams(params []string) error {
+	switch params[0] {
+	case "set":
+		if len(params) != 3 {
+			return invalidCommandError
+		}
+	case "get":
+		if len(params) != 2 {
+			return invalidCommandError
+		}
+	case "delete":
+		if len(params) != 2 {
+			return invalidCommandError
+		}
+	default:
+		return invalidCommandError
+	}
+
+	return nil
 }

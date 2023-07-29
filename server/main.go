@@ -12,7 +12,7 @@ const (
 	headerSize     uint32 = 4
 )
 
-func main() {
+func try() {
 	localAddress := net.TCPAddr{
 		IP:   net.ParseIP("127.0.0.1"),
 		Port: 3632,
