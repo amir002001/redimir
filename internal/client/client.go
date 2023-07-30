@@ -12,7 +12,6 @@ func init() {
 	remoteAddress := net.TCPAddr{
 		IP:   net.ParseIP("localhost"),
 		Port: 2807, // El Psy Kongroo
-		Zone: "",
 	}
 	conn, err := net.DialTCP("tcp4", nil, &remoteAddress)
 	if err != nil {
@@ -54,7 +53,13 @@ func handleGet(key string) (result string, err error) {
 }
 
 func handleSet(key, newValue string) (result string, err error) {
-	request := fmt.Sprintf("*3\r\n$3set\r\n$%d%s\r\n%d%s", len(key), key, len(newValue), newValue)
+	request := fmt.Sprintf(
+		"*3\r\n$3\r\nset\r\n$%d\r\n%s\r\n$%d\r\n%s\r\n",
+		len(key),
+		key,
+		len(newValue),
+		newValue,
+	)
 	_, err = redimirConnection.Write([]byte(request))
 	if err != nil {
 		return "", err
