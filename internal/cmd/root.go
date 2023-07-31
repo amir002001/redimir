@@ -3,7 +3,7 @@ package cmd
 import "github.com/spf13/cobra"
 
 func init() {
-	rootCommand.AddCommand(clientCommand, serverCommand)
+	rootCommand.AddCommand(clientCommand)
 }
 
 var rootCommand = &cobra.Command{

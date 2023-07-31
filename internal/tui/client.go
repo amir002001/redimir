@@ -14,6 +14,11 @@ var invalidCommandError = fmt.Errorf("invalid command")
 
 func InitializeClient() error {
 	// Instantiate the widget.
+	client, err := client.Initialize()
+	if err != nil {
+		return err
+	}
+
 	m := bubbline.New()
 
 	m.Prompt = "redimir> "
@@ -37,7 +42,7 @@ func InitializeClient() error {
 				continue
 			}
 
-			if result, err := handleParams(params); err != nil {
+			if result, err := handleParams(client, params); err != nil {
 				fmt.Println(err.Error())
 			} else {
 				fmt.Println(result)
@@ -51,6 +56,6 @@ func InitializeClient() error {
 	return nil
 }
 
-func handleParams(params []string) (result string, err error) {
+func handleParams(client *client.Client, params []string) (result string, err error) {
 	return client.SendParams(params)
 }
